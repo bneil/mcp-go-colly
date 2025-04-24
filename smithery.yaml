@@ -21,7 +21,7 @@ mcp:
                 type: string
             - name: max_depth
               type: integer
-              description: Maximum crawl depth (default: 2)
+              description: Maximum crawl depth, defaults to 2
               default: 2
           returns:
             type: object
