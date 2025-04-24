@@ -4,7 +4,6 @@ name: mcp-go-colly
 description: A web crawling tool that integrates MCP with Colly for content extraction
 version: 1.0.0
 
-# Define the MCP server configuration
 mcp:
   servers:
     web-crawler:
@@ -21,18 +20,16 @@ mcp:
                 type: string
             - name: max_depth
               type: integer
-              description: Maximum crawl depth, defaults to 2
+              description: Maximum crawl depth (default to 2)
               default: 2
           returns:
             type: object
             description: Crawled content and metadata
 
-# Build configuration
 build:
   command: make build
   output: bin/mcp-go-colly
 
-# Development settings
 development:
   watch:
     - cmd/
@@ -42,4 +39,11 @@ development:
     - bin/
     - .git/
     - .github/
+
+startCommand:
+  type: stdio
+  commandFunction: |
+    (config) => ({
+      command: "bin/mcp-go-colly"
+    })
 
