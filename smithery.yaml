@@ -42,6 +42,19 @@ development:
 
 startCommand:
   type: stdio
+  configSchema:
+    type: object
+    properties:
+      urls:
+        type: array
+        description: List of URLs to crawl
+        items:
+          type: string
+      max_depth:
+        type: integer
+        description: Maximum crawl depth (default to 2)
+        default: 2
+    required: ["urls"]
   commandFunction: |
     (config) => ({
       command: "bin/mcp-go-colly"
