@@ -1,7 +1,7 @@
 package crawler
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"sync"
 
@@ -10,10 +10,10 @@ import (
 
 // CrawlResult represents the data extracted from a single webpage
 type CrawlResult struct {
-	URL     string
-	Title   string
-	Content string
-	Error   error
+	URL     string `json:"url"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+	Error   error  `json:"error,omitempty"`
 }
 
 // MCPCrawler manages web crawling with MCP integration
@@ -35,31 +35,8 @@ type CrawlerConfig struct {
 // Option type for configuration
 type Option func(*CrawlerConfig)
 
-// WithDefaultConfig provides a standard configuration
-func WithDefaultConfig() Option {
-	return func(c *CrawlerConfig) {
-		c.MaxDepth = 2
-		c.UserAgent = "MCPCrawler/1.0"
-		c.Timeout = 10
-	}
-}
-
-// WithMaxDepth sets the maximum crawl depth
-func WithMaxDepth(depth int) Option {
-	return func(c *CrawlerConfig) {
-		c.MaxDepth = depth
-	}
-}
-
-// WithAllowedDomains restricts crawling to specific domains
-func WithAllowedDomains(domains []string) Option {
-	return func(c *CrawlerConfig) {
-		c.AllowedDomains = domains
-	}
-}
-
 // NewMCPCrawler initializes a new crawler with given options
-func NewMCPCrawler(opts ...Option) (*MCPCrawler, error) {
+func NewMCPCrawler(ctx context.Context, opts ...Option) (*MCPCrawler, error) {
 	// Default configuration
 	config := &CrawlerConfig{
 		MaxDepth:       2,
@@ -128,18 +105,23 @@ func (mc *MCPCrawler) setupEventHandlers() {
 }
 
 // CrawlMultiple crawls multiple target URLs concurrently
-func (mc *MCPCrawler) CrawlMultiple(urls []string) ([]CrawlResult, error) {
+func (mc *MCPCrawler) CrawlMultiple(ctx context.Context, urls []string) ([]CrawlResult, error) {
 	var wg sync.WaitGroup
 	
 	for _, url := range urls {
-		wg.Add(1)
-		go func(targetURL string) {
-			defer wg.Done()
-			err := mc.collector.Visit(targetURL)
-			if err != nil {
-				log.Printf("Failed to crawl %s: %v", targetURL, err)
-			}
-		}(url)
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+			wg.Add(1)
+			go func(targetURL string) {
+				defer wg.Done()
+				err := mc.collector.Visit(targetURL)
+				if err != nil {
+					log.Printf("Failed to crawl %s: %v", targetURL, err)
+				}
+			}(url)
+		}
 	}
 
 	wg.Wait()
