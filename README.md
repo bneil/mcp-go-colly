@@ -1,4 +1,5 @@
 # MCP Go Colly Crawler
+[![smithery badge](https://smithery.ai/badge/@bneil/mcp-go-colly)](https://smithery.ai/server/@bneil/mcp-go-colly)
 
 ## Overview
 MCP Go Colly is a sophisticated web crawling framework that integrates the Model Context Protocol (MCP) with the powerful Colly web scraping library. This project aims to provide a flexible and extensible solution for extracting web content for large language model (LLM) applications.
