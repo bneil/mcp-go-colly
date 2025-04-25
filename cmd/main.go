@@ -78,6 +78,9 @@ func main() {
 		return &mcp.CallToolResult{Content: returnContent}, nil
 	}))
 
+        // Let the people know whats going on
+        log.Println("Let's get crawling... goddamnit donut...")
+
 	// Start the server with the correct function signature
 	if err := server.ServeStdio(s); err != nil {
 		log.Fatalf("Server error: %v", err)
