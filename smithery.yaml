@@ -5,7 +5,7 @@ startCommand:
     type: object
     properties:
       urls:
-        type: object
+        type: array
         description: List of URLs to crawl
       max_depth:
         type: integer
