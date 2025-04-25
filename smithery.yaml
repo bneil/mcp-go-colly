@@ -3,12 +3,14 @@ startCommand:
   type: stdio
   configSchema:
     type: object
+    required:
+      - urls
     properties:
       urls:
         type: array
         description: List of URLs to crawl
       max_depth:
-        type: integer
+        type: number
         description: Maximum crawl depth (default to 2)
     required: ["urls"]
   commandFunction: |
