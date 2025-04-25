@@ -12,7 +12,6 @@ startCommand:
       max_depth:
         type: number
         description: Maximum crawl depth (default to 2)
-    required: ["urls"]
   commandFunction: |
     (config) => ({
       command: "bin/mcp-go-colly"
