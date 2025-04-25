@@ -1,62 +1,17 @@
 # Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
-
-name: mcp-go-colly
-description: A web crawling tool that integrates MCP with Colly for content extraction
-version: 1.0.0
-
-mcp:
-  servers:
-    web-crawler:
-      command: bin/mcp-go-colly
-      description: Web crawler server using Colly and MCP
-      tools:
-        - name: web-crawler
-          description: Crawls web pages and extracts content
-          parameters:
-            - name: urls
-              type: array
-              description: List of URLs to crawl
-              items:
-                type: string
-            - name: max_depth
-              type: integer
-              description: Maximum crawl depth (default to 2)
-              default: 2
-          returns:
-            type: object
-            description: Crawled content and metadata
-
-build:
-  command: make build
-  output: bin/mcp-go-colly
-
-development:
-  watch:
-    - cmd/
-    - internal/
-    - Makefile
-  ignore:
-    - bin/
-    - .git/
-    - .github/
-
 startCommand:
   type: stdio
   configSchema:
     type: object
     properties:
       urls:
-        type: array
+        type: object
         description: List of URLs to crawl
-        items:
-          type: string
       max_depth:
         type: integer
         description: Maximum crawl depth (default to 2)
-        default: 2
     required: ["urls"]
   commandFunction: |
     (config) => ({
       command: "bin/mcp-go-colly"
     })
-
