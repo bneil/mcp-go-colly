@@ -9,10 +9,16 @@ startCommand:
       urls:
         type: array
         description: List of URLs to crawl
+        items:
+          type: string
       max_depth:
         type: number
-        description: Maximum crawl depth (default to 2)
+        description: Maximum crawl depth (defaults to 2)
+        default: 2
   commandFunction: |
     (config) => ({
       command: "bin/mcp-go-colly"
     })
+  exampleConfig:
+    urls: ["https://example.com"]
+    max_depth: 2
